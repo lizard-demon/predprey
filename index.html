@@ -19,8 +19,8 @@
   input[name="view"] { display: none; }
   
   /* Active Tab Styling */
-  body:has(#view-shop:checked) label[for="view-shop"],
-  body:has(#view-links:checked) label[for="view-links"],
+  body:has(#view-home:checked) label[for="view-home"],
+  body:has(#view-shop:checked) lassets/shop/lizrd_demon.sticker.pngview-links"],
   body:has(#view-resources:checked) label[for="view-resources"] { 
       color: var(--txt); 
       text-decoration: underline; 
@@ -29,11 +29,18 @@
   
   /* Page Visibility */
   .page { display: none; padding: 0 2rem 2rem; width: 100%; max-width: 1400px; margin: 0 auto; animation: fade .3s ease; }
+  #view-home:checked ~ .home-view { display: flex; }
   #view-shop:checked ~ .shop-view { display: grid; }
   #view-links:checked ~ .links-view { display: flex; }
   #view-resources:checked ~ .resources-view { display: grid; }
   
   @keyframes fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* --- VIEW 0: HOME --- */
+  .home-view { flex-direction: column; align-items: center; text-align: center; max-width: 800px; }
+  .home-img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 2rem; opacity: 0.9; border: 1px solid var(--border); }
+  .home-text { font-size: 1.1rem; line-height: 1.6; color: var(--sub); max-width: 650px; }
+  .home-text strong { color: var(--txt); font-weight: 600; }
 
   /* --- VIEW 1: SHOP (Grid of Cards) --- */
   .shop-view { grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 2rem; }
@@ -91,54 +98,42 @@
 <body>
 
 <!-- State Inputs -->
+<input type="radio" name="view" id="view-home" checked>
+<input type="radio" name="view" id="view-shop">
 <input type="radio" name="view" id="view-links">
 <input type="radio" name="view" id="view-resources">
-<input type="radio" name="view" id="view-shop" checked>
 
 <header>
-  <h1>predprey</h1>
+  <h1>r/predprey</h1>
   <nav>
-    <label for="view-links">Links</label>
-    <label for="view-shop">Shop</label>
-    <label for="view-resources">Resources</label>
+    <label for="view-home">[Home]</label>
+    <label for="view-shop">[Shop]</label>
+    <label for="view-links">[Community]</label>
+    <label for="view-resources">[Resources]</label>
   </nav>
 </header>
+
+<!-- 0. Home Page -->
+<main class="page home-view">
+  <img src="assets/home/hero.png" alt="Hero" class="home-img">
+  <div class="home-text">
+    <p style="margin-bottom: 1rem;">
+      <strong>A simple trope with a large community.</strong>
+    </p>
+    <p>
+        This is a collection of links to community spaces, merch, and resources for the predprey community.
+        We update this list passively, but if you would like to specifically add something, just DM the r/predprey mods.
+    </p>
+  </div>
+</main>
 
 <!-- 1. Shop Page -->
 <main class="page shop-view">
   <article class="card">
-    <div class="media"><img src="https://images.unsplash.com/photo-1610214814276-2f0808b04323?w=600&q=80" loading="lazy" alt="Oak"></div>
-    <div class="body"><div class="head"><span>White Oak Slat</span><span>$145/sqm</span></div>
-      <ul class="specs"><li>Solid White Oak</li><li>Acoustic felt backing</li><li>2400mm x 600mm</li></ul>
-      <a href="mailto:orders@site.com?subject=Order: White Oak" class="btn">Order via Email</a>
-    </div>
-  </article>
-  <article class="card">
-    <div class="media"><img src="https://images.unsplash.com/photo-1549419409-dc0a23232c69?w=600&q=80" loading="lazy" alt="Walnut"></div>
-    <div class="body"><div class="head"><span>Smoked Walnut</span><span>$180/sqm</span></div>
-      <ul class="specs"><li>American Walnut Veneer</li><li>Class A Fire Rated</li><li>Matte oil finish</li></ul>
-      <a href="mailto:orders@site.com?subject=Order: Smoked Walnut" class="btn">Order via Email</a>
-    </div>
-  </article>
-  <article class="card">
-    <div class="media"><img src="https://images.unsplash.com/photo-1517646331032-9e8563c523a1?w=600&q=80" loading="lazy" alt="Ash"></div>
-    <div class="body"><div class="head"><span>Charcoal Ash</span><span>$165/sqm</span></div>
-      <ul class="specs"><li>Carbonized finish</li><li>Deep brushed texture</li><li>Water resistant</li></ul>
-      <a href="mailto:orders@site.com?subject=Order: Charcoal Ash" class="btn">Order via Email</a>
-    </div>
-  </article>
-  <article class="card">
-    <div class="media"><img src="https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=600&q=80" loading="lazy" alt="Birch"></div>
-    <div class="body"><div class="head"><span>Raw Birch Ply</span><span>$95/sqm</span></div>
-      <ul class="specs"><li>Baltic Birch</li><li>BB/CP Grade</li><li>Unfinished (Paint ready)</li></ul>
-      <a href="mailto:orders@site.com?subject=Order: Raw Birch" class="btn">Order via Email</a>
-    </div>
-  </article>
-  <article class="card">
-    <div class="media"><img src="https://images.unsplash.com/photo-1595846519845-68e298c2edd8?w=600&q=80" loading="lazy" alt="Hex"></div>
-    <div class="body"><div class="head"><span>Geo-Panel Hex</span><span>$210/box</span></div>
-      <ul class="specs"><li>Recycled Teak</li><li>3D Geometric Pattern</li><li>12 tiles per box</li></ul>
-      <a href="mailto:orders@site.com?subject=Order: Geo-Panel Hex" class="btn">Order via Email</a>
+    <div class="media"><img src="assets/shop/lizrd_demon.sticker.png" loading="lazy" alt="Oak"></div>
+    <div class="body"><div class="head"><span></span>"Where Your Fangs Became My Shelter"<span>$5</span></div>
+      <ul class="specs"><li>Weatherproof Vinyl Sticker</li><li>Locally Printed</li><li>4.1" x 2.6"</li></ul>
+      <a href="https://ko-fi.com/s/7188ae01e2" class="btn">Order via Ko-Fi</a>
     </div>
   </article>
 </main>
@@ -146,72 +141,36 @@
 <!-- 2. Links Page -->
 <main class="page links-view">
   <a href="#" class="link-card">
-    <div class="link-img"><img src="https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=400&q=80" alt="Discord"></div>
+    <div class="link-img"><img src="assets/community/regime.webp" alt="Discord"></div>
     <div class="link-info">
-      <div class="link-title">Join our Discord <span>→</span></div>
-      <div class="link-blurb">Join 5,000+ members discussing DIY builds, sharing tips, and showing off setups.</div>
+      <div class="link-title">Regime<span>→</span></div>
+      <div class="link-blurb">Join a highly active predprey writers discord.</div>
     </div>
   </a>
   
   <a href="#" class="link-card">
-    <div class="link-img"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&q=80" alt="Guide"></div>
+    <div class="link-img"><img src="assets/community/chase_me_softly.webp" alt="Discord"></div>
     <div class="link-info">
-      <div class="link-title">Installation Guide (PDF) <span>→</span></div>
-      <div class="link-blurb">Comprehensive step-by-step instructions for installing panels on any wall type.</div>
-    </div>
-  </a>
-
-  <a href="#" class="link-card">
-    <div class="link-img"><img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400&q=80" alt="Gallery"></div>
-    <div class="link-info">
-      <div class="link-title">Instagram Gallery <span>→</span></div>
-      <div class="link-blurb">Daily design inspiration featuring the best customer renovations and light setups.</div>
+      <div class="link-title"> Chase Me Softly 🔞 <span>→</span></div>
+      <div class="link-blurb">NSFW PredPrey Roleplay Server.</div>
     </div>
   </a>
 </main>
 
 <!-- 3. Resources Page -->
 <main class="page resources-view">
-  <a href="#" class="res-item">
-    <div class="res-cat">Tools</div>
-    <div class="res-head">Acoustic Calculator</div>
-    <div class="res-desc">Calculate the exact square footage of sound-dampening material needed for your room dimensions.</div>
-    <div class="res-link">Open Tool</div>
+  <a href="https://www.reddit.com/r/predprey/comments/1od8o8v/the_ultimate_furry_media_depository/" class="res-item">
+    <div class="res-cat">Megalist</div>
+    <div class="res-head">The Furry Media Depository</div>
+    <div class="res-desc">A constantly growing archive of furry media made by a community member.</div>
+    <div class="res-link">link</div>
   </a>
 
-  <a href="#" class="res-item">
-    <div class="res-cat">Directory</div>
-    <div class="res-head">Approved Installers</div>
-    <div class="res-desc">Find certified contractors in your area who specialize in our paneling systems.</div>
-    <div class="res-link">View Map</div>
-  </a>
-
-  <a href="#" class="res-item">
-    <div class="res-cat">Maintenance</div>
-    <div class="res-head">Care Sheet: Walnut</div>
-    <div class="res-desc">Detailed guide on oiling and maintaining American Walnut veneer for longevity.</div>
-    <div class="res-link">Download PDF</div>
-  </a>
-
-  <a href="#" class="res-item">
-    <div class="res-cat">Sustainability</div>
-    <div class="res-head">FSC Certification</div>
-    <div class="res-desc">Read about our sourcing practices and verify our Chain of Custody numbers.</div>
-    <div class="res-link">Read Report</div>
-  </a>
-
-  <a href="#" class="res-item">
-    <div class="res-cat">Education</div>
-    <div class="res-head">Lighting Guide</div>
-    <div class="res-desc">Best practices for uplighting and downlighting textured slat walls.</div>
-    <div class="res-link">Read Article</div>
-  </a>
-  
-  <a href="#" class="res-item">
-    <div class="res-cat">Community</div>
-    <div class="res-head">User Showcase Archive</div>
-    <div class="res-desc">Browse our complete history of user-submitted project photos by year.</div>
-    <div class="res-link">Browse Archive</div>
+  <a href="https://www.reddit.com/r/predprey/comments/1mpash7/the_ultimate_predprey_media_list/" class="res-item">
+    <div class="res-cat">Megalist</div>
+    <div class="res-head">The Ultimate PredPrey Media List</div>
+    <div class="res-desc">Community thread with a lot of PredPrey specific recommendations.</div>
+    <div class="res-link">link</div>
   </a>
 </main>
 
