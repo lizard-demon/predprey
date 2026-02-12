@@ -1,190 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>predprey</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>r/predprey Directory</title>
 <style>
-  :root { --bg: #000000; --surf: #0a0a0a; --txt: #ffffff; --sub: #a1a1aa; --act: #ffffff; --border: #ffffff; }
+  :root {
+    --bg: #09090b; --surf: #18181b; --surf-h: #27272a; --border: #3f3f46;
+    --txt: #e4e4e7; --sub: #a1a1aa; --acc: #fff; --tag-bg: #27272a;
+  }
   * { box-sizing: border-box; }
-  body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--txt); margin: 0; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
-  
-  /* Header & Nav */
-  header { text-align: center; padding: 2rem 1rem 1rem; }
-  h1 { font-weight: 700; letter-spacing: -1px; margin: 0 0 1rem; font-size: 2rem; }
-  
-  nav { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
-  
-  nav a { 
-      cursor: pointer; 
-      color: var(--sub); 
-      font-weight: 500; 
-      transition: .2s; 
-      text-decoration: none;
-  }
-  nav a:hover { color: var(--txt); }
-  
-  /* --- ACTIVE NAV STATE --- */
-  /* 1. If 'home' is targeted, OR no page is targeted (default load) */
-  body:has(#home:target) nav a[href="#home"],
-  body:not(:has(.page:target)) nav a[href="#home"],
-  /* 2. Specific pages */
-  body:has(#shop:target) nav a[href="#shop"],
-  body:has(#links:target) nav a[href="#links"],
-  body:has(#resources:target) nav a[href="#resources"] { 
-      color: var(--txt); 
-      text-decoration: underline; 
-      text-underline-offset: 4px; 
+  body {
+    font-family: system-ui, sans-serif; background: var(--bg); color: var(--txt);
+    margin: 0; min-height: 100vh; display: flex; flex-direction: column;
   }
   
-  /* --- PAGE VISIBILITY LOGIC --- */
-  .page { 
-      display: none; /* Hidden by default */
-      padding: 0 2rem 2rem; 
-      width: 100%; 
-      max-width: 1400px; 
-      margin: 0 auto; 
-      animation: fade .3s ease; 
+  /* Header */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(9,9,11,0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); padding: 1rem;
   }
+  .head-wrap {
+    max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; 
+    justify-content: space-between; gap: 1rem; align-items: center;
+  }
+  .brand { font-weight: 800; font-size: 1.25rem; color: var(--acc); text-decoration: none; }
+  .brand span { background: var(--acc); color: var(--bg); padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; }
+
+  /* Controls */
+  .controls { display: flex; gap: 0.5rem; flex: 1; justify-content: flex-end; flex-wrap: wrap; }
+  input {
+    background: var(--surf); border: 1px solid var(--border); color: var(--txt);
+    padding: 0.5rem 1rem; border-radius: 6px; outline: none; width: 200px;
+  }
+  input:focus { border-color: var(--acc); }
+  button {
+    background: transparent; border: 1px solid var(--border); color: var(--sub);
+    padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; transition: 0.2s;
+  }
+  button:hover { color: var(--txt); border-color: var(--sub); }
+  button.active { background: var(--acc); color: var(--bg); border-color: var(--acc); }
+
+  /* Layout */
+  main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; width: 100%; }
+  .intro { margin-bottom: 3rem; max-width: 600px; color: var(--sub); line-height: 1.6; }
+  .intro h2 { font-size: 1.5rem; margin: 0 0 0.5rem; color: var(--acc); }
+  .intro a { color: var(--txt); }
+
+  /* Grid & Cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
   
-  @keyframes fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* 1. Show Home if targeted OR if nothing is targeted */
-  #home:target,
-  body:not(:has(.page:target)) #home { display: flex; }
-
-  /* 2. Show others only when targeted */
-  #shop:target { display: grid; }
-  #links:target { display: flex; }
-  #resources:target { display: grid; }
-
-
-  /* --- VIEW 0: HOME --- */
-  #home { flex-direction: column; align-items: center; text-align: center; max-width: 800px; }
-  .home-img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 2rem; opacity: 0.9; border: 1px solid var(--border); }
-  .home-text { font-size: 1.1rem; line-height: 1.6; color: var(--sub); max-width: 650px; }
-  .home-text strong { color: var(--txt); font-weight: 600; }
-
-  /* --- VIEW 1: SHOP (Grid of Cards) --- */
-  #shop { grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 2rem; }
-  .card { background: var(--surf); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: .2s ease; }
-  .card:hover { transform: translateY(-4px); border-color: #d4d4d8; }
-  .media { height: 220px; overflow: hidden; background: #27272a; }
-  .media img { width: 100%; height: 100%; object-fit: cover; transition: .5s; opacity: 0.9; }
+  .card {
+    background: var(--surf); border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; display: flex; flex-direction: column; text-decoration: none;
+    transition: 0.2s; animation: fade 0.3s ease forwards;
+  }
+  @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
+  .card:hover { transform: translateY(-4px); border-color: var(--sub); background: var(--surf-h); box-shadow: 0 10px 30px #0008; }
+  
+  .card > div:first-child { /* Image wrapper */
+    height: 160px; background: #000; border-bottom: 1px solid var(--border); overflow: hidden;
+    position: relative; background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 10px 10px;
+  }
+  .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: 0.5s; }
   .card:hover img { transform: scale(1.05); opacity: 1; }
-  .body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
-  .head { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 0.5rem; font-size: 1.1rem; }
-  ul.specs { padding: 0; list-style: none; color: var(--sub); font-size: 0.875rem; margin: 0 0 1.5rem; }
-  ul.specs li::before { content: "• "; color: #52525b; margin-right: 4px; }
-  .btn { margin-top: auto; background: var(--act); color: #000; padding: .75rem; text-align: center; border-radius: 6px; text-decoration: none; font-weight: 600; transition: .2s; }
-  .btn:hover { background: #d4d4d8; }
 
-  /* --- VIEW 2: LINKS (Vertical List) --- */
-  #links { flex-direction: column; align-items: stretch; max-width: 700px; gap: 1rem; }
-  .link-card { display: flex; background: var(--surf); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; text-decoration: none; color: var(--txt); transition: .2s; min-height: 120px; }
-  .link-card:hover { transform: translateY(-2px); background: #111; }
-  .link-img { width: 140px; flex-shrink: 0; overflow: hidden; background: #27272a; }
-  .link-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; opacity: 0.8; }
-  .link-card:hover .link-img img { transform: scale(1.05); opacity: 1; }
-  .link-info { padding: 1.25rem; display: flex; flex-direction: column; justify-content: center; flex: 1; }
-  .link-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.35rem; display: flex; justify-content: space-between; align-items: center; }
-  .link-blurb { color: var(--sub); font-size: 0.9rem; line-height: 1.4; }
-
-  /* --- VIEW 3: RESOURCES (Directory Grid) --- */
-  #resources { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-  .res-item { 
-    background: transparent; 
-    border: 1px solid var(--sub); 
-    padding: 1.5rem; 
-    border-radius: 4px; 
-    text-decoration: none; 
-    color: var(--txt); 
-    transition: all .2s; 
-    display: flex; 
-    flex-direction: column; 
+  article { padding: 1.25rem; display: flex; flex-direction: column; flex: 1; }
+  .badge { 
+    font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    background: var(--tag-bg); color: var(--sub); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border);
+    align-self: flex-start; margin-bottom: 0.75rem;
   }
-  .res-item:hover { border-color: var(--act); background: rgba(255,255,255,0.05); }
-  .res-cat { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--sub); margin-bottom: 0.75rem; }
-  .res-head { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .res-desc { color: #ccc; font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem; flex-grow: 1; }
-  .res-link { font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
-  .res-link::after { content: "↗"; font-size: 1rem; }
-
-  @media (max-width: 640px) { 
-    .page { padding: 0 1rem 2rem; } 
-    .grid, #resources { gap: 1rem; } 
-    .link-card { flex-direction: column; }
-    .link-img { width: 100%; height: 140px; }
+  h3 { color: var(--txt); font-size: 1.1rem; margin: 0; line-height: 1.3; }
+  p { color: var(--sub); font-size: 0.9rem; margin: 0 0 1rem; flex: 1; line-height: 1.5; }
+  footer { 
+    border-top: 1px solid var(--border); padding-top: 1rem; display: flex; 
+    justify-content: space-between; font-size: 0.85rem; color: var(--sub); 
   }
+  footer span:last-child::after { content: " ↗"; }
+  
+  @media (max-width: 640px) { .controls { justify-content: flex-start; overflow-x: auto; } input { width: 100%; } }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>r/predprey</h1>
-  <nav>
-    <a href="#home">[Home]</a>
-    <a href="#shop">[Shop]</a>
-    <a href="#links">[Community]</a>
-    <a href="#resources">[Resources]</a>
-  </nav>
+  <div class="head-wrap">
+    <a href="?" class="brand"><span>r/</span> predprey</a>
+    <div class="controls" id="filters">
+      <input type="text" id="search" placeholder="Search directory...">
+      <button data-f="all">All</button>
+      <button data-f="community">Community</button>
+      <button data-f="merch">Shop</button>
+      <button data-f="resource">Resources</button>
+    </div>
+  </div>
 </header>
 
-<main id="home" class="page">
-  <img src="assets/home/hero.png" alt="Hero" class="home-img">
-  <div class="home-text">
-    <p style="margin-bottom: 1rem;">
-      <strong>A simple trope with a large community.</strong>
-    </p>
-    <p>
-        This is a collection of links to community spaces, merch, and resources for the predprey community.
-        We update this list passively, but if you would like to specifically add something, just DM the r/predprey mods.
-    </p>
+<main>
+  <div class="intro">
+    <h2>Directory</h2>
+    <p>A curated collection of spaces and resources. Listings are passively updated. DM the <a href="#">r/predprey mods</a> to add yours.</p>
+  </div>
+
+  <div class="grid" id="grid">
+    <a href="https://ko-fi.com/s/7188ae01e2" class="card" data-c="merch" data-n="fangs shelter sticker">
+      <div><img src="assets/shop/lizrd_demon.sticker.png" onerror="this.style.display='none'"></div>
+      <article>
+        <div class="badge">Merch</div>
+        <h3>"Where Your Fangs Became My Shelter"</h3>
+        <p>Weatherproof Vinyl Sticker. 4.1" x 2.6". Locally Printed.</p>
+        <footer><span>$5.00 via Ko-Fi</span><span>Buy</span></footer>
+      </article>
+    </a>
+
+    <a href="https://discord.gg/MEVJ4r4TD7" class="card" data-c="community" data-n="regime discord writers">
+      <div><img src="assets/community/regime.webp" onerror="this.style.display='none'"></div>
+      <article>
+        <div class="badge">Community</div>
+        <h3>Regime</h3>
+        <p>Join a highly active predprey writers discord community.</p>
+        <footer><span>Discord</span><span>Join</span></footer>
+      </article>
+    </a>
+
+    <a href="https://discord.gg/xxrWeP5eMH" class="card" data-c="community" data-n="just fluff stuff roleplay">
+      <div><img src="assets/community/chase_me_softly.webp" onerror="this.style.display='none'"></div>
+      <article>
+        <div class="badge">Community</div>
+        <h3>Just Fluff Stuff 🔞</h3>
+        <p>PredPrey-Friendly Community Roleplay Server.</p>
+        <footer><span>Discord</span><span>Join</span></footer>
+      </article>
+    </a>
+
+    <a href="https://www.reddit.com/r/predprey/comments/1od8o8v/the_ultimate_furry_media_depository/" class="card" data-c="resource" data-n="media depository archive">
+      <article>
+        <div class="badge">Megalist</div>
+        <h3>The Furry Media Depository</h3>
+        <p>A constantly growing archive of furry media made by a community member.</p>
+        <footer><span>Reddit</span><span>Read</span></footer>
+      </article>
+    </a>
+
+    <a href="https://www.reddit.com/r/predprey/comments/1mpash7/the_ultimate_predprey_media_list/" class="card" data-c="resource" data-n="ultimate media list">
+      <article>
+        <div class="badge">Megalist</div>
+        <h3>The Ultimate PredPrey Media List</h3>
+        <p>Community thread with a lot of PredPrey specific recommendations.</p>
+        <footer><span>Reddit</span><span>Read</span></footer>
+      </article>
+    </a>
   </div>
 </main>
 
-<main id="shop" class="page">
-  <article class="card">
-    <div class="media"><img src="assets/shop/lizrd_demon.sticker.png" loading="lazy" alt="Oak"></div>
-    <div class="body"><div class="head"><span></span>"Where Your Fangs Became My Shelter"<span>$5</span></div>
-      <ul class="specs"><li>Weatherproof Vinyl Sticker</li><li>Locally Printed</li><li>4.1" x 2.6"</li></ul>
-      <a href="https://ko-fi.com/s/7188ae01e2" class="btn">Order via Ko-Fi</a>
-    </div>
-  </article>
-</main>
+<script>
+  const grid = document.getElementById('grid');
+  const search = document.getElementById('search');
+  const filters = document.getElementById('filters');
+  const cards = document.querySelectorAll('.card');
 
-<main id="links" class="page">
-  <a href="https://discord.gg/MEVJ4r4TD7" class="link-card">
-    <div class="link-img"><img src="assets/community/regime.webp" alt="Discord"></div>
-    <div class="link-info">
-      <div class="link-title">Regime<span>→</span></div>
-      <div class="link-blurb">Join a highly active predprey writers discord.</div>
-    </div>
-  </a>
+  // Unified Update Function
+  const update = () => {
+    const q = search.value.toLowerCase();
+    const activeBtn = filters.querySelector('.active') || filters.querySelector('[data-f="all"]');
+    const cat = activeBtn.dataset.f;
+    
+    // Update URL without reload
+    const url = new URL(window.location);
+    url.searchParams.set('q', q);
+    url.searchParams.set('category', cat);
+    history.replaceState({}, '', url);
+
+    // Filter Logic
+    cards.forEach(c => {
+      const matchCat = cat === 'all' || c.dataset.c === cat;
+      const matchSearch = c.dataset.n.includes(q) || c.innerText.toLowerCase().includes(q);
+      c.style.display = (matchCat && matchSearch) ? 'flex' : 'none';
+    });
+  };
+
+  // Event Delegation & Init
+  filters.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+      filters.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      update();
+    }
+  });
   
-  <a href="https://discord.gg/xxrWeP5eMH" class="link-card">
-    <div class="link-img"><img src="assets/community/chase_me_softly.webp" alt="Discord"></div>
-    <div class="link-info">
-      <div class="link-title"> Just Fluff Stuff 🔞 <span>→</span></div>
-      <div class="link-blurb"> PredPrey-Friendly Community Roleplay Server.</div>
-    </div>
-  </a>
-</main>
+  search.addEventListener('input', update);
 
-<main id="resources" class="page">
-  <a href="https://www.reddit.com/r/predprey/comments/1od8o8v/the_ultimate_furry_media_depository/" class="res-item">
-    <div class="res-cat">Megalist</div>
-    <div class="res-head">The Furry Media Depository</div>
-    <div class="res-desc">A constantly growing archive of furry media made by a community member.</div>
-    <div class="res-link">link</div>
-  </a>
-
-  <a href="https://www.reddit.com/r/predprey/comments/1mpash7/the_ultimate_predprey_media_list/" class="res-item">
-    <div class="res-cat">Megalist</div>
-    <div class="res-head">The Ultimate PredPrey Media List</div>
-    <div class="res-desc">Community thread with a lot of PredPrey specific recommendations.</div>
-    <div class="res-link">link</div>
-  </a>
-</main>
-
+  // Init from URL
+  const params = new URLSearchParams(window.location.search);
+  search.value = params.get('q') || '';
+  const initCat = params.get('category') || 'all';
+  (filters.querySelector(`[data-f="${initCat}"]`) || filters.children[1]).classList.add('active');
+  update();
+</script>
 </body>
 </html>
